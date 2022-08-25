@@ -1,0 +1,13 @@
+{
+    "name": "myerscode/testing-package-discovery",
+    "require": {
+        "php": "^8.1",
+        "myerscode/utilities-bags": "^2.0",
+        "myerscode/utilities-files": "^2.0"
+    },
+    "extra": {
+        "myerscode": {
+            "dont-discover": [ ]
+        }
+    }
+}
