@@ -95,3 +95,16 @@ If you want to avoid loading in all discoverable packages, simply add `*` in the
   }
 }
 ```
+
+## Locating a package
+
+When you want to find out where a pacakge is located on the disk, you can use the `locate` method to look up its absolute 
+path.
+
+```php 
+$finder = new Finder(__DIR__);
+
+echo $finder->locate('myerscode/test-package');
+
+// /User/fred/project-name/vendor/myerscode/test-package
+```

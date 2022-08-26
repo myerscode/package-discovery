@@ -4,6 +4,7 @@ namespace Tests;
 
 use Myerscode\PackageDiscovery\Finder;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 class FinderTest extends TestCase
 {
@@ -69,5 +70,26 @@ class FinderTest extends TestCase
         $discovered = $finder->discover($discover);
 
         $this->assertCount($found, $discovered);
+    }
+
+    public function testCanLocatePackage()
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $location = $finder->locate('myerscode/test-package');
+
+        $this->assertEquals(__DIR__.'/Resources/test_locate/myerscode/test-package', $location);
+    }
+
+    public function testThrowsExceptionWhenCannotLocatePackage()
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+        $packageName = 'myerscode/does-not-exists-package';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("$packageName is not a known package");
+        $finder->locate($packageName);
     }
 }

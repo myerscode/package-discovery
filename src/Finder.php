@@ -4,6 +4,7 @@ namespace Myerscode\PackageDiscovery;
 
 use Myerscode\Utilities\Files\Utility as FileUtility;
 use Myerscode\Utilities\Bags\Utility as BagUtility;
+use InvalidArgumentException;
 
 class Finder
 {
@@ -57,5 +58,23 @@ class Finder
             ->filter($filter)
             ->filter($filterIgnored)
             ->value();
+    }
+
+    /**
+     * Get the absolute location of package
+     *
+     * @param  string  $packageName
+     *
+     * @return string
+     */
+    public function locate(string $packageName): string
+    {
+        $packages = (new BagUtility($this->installedPackages()))->mapKeys(fn($k, $v) => [$v['name'] => $v])->value();
+
+        if (!isset($packages[$packageName])) {
+            throw new InvalidArgumentException("$packageName is not a known package");
+        }
+
+        return str_replace('../', $this->basePath . '/', $packages[$packageName]["install-path"]);
     }
 }
