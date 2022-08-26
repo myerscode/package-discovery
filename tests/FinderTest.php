@@ -25,6 +25,16 @@ class FinderTest extends TestCase
                 'myerscode',
                 0,
             ],
+            [
+                'test_four',
+                'myerscode',
+                0,
+            ],
+            [
+                'test_five',
+                'myerscode',
+                0,
+            ],
         ];
     }
 

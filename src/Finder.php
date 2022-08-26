@@ -34,7 +34,7 @@ class Finder
     {
         $ignore = [];
         if (($rootPackage = new FileUtility($this->basePath.'/composer.json'))->exists()) {
-            $ignore = json_decode($rootPackage->content(), true)['extra'][$forPackage]['dont-discover'] ?? [];
+            $ignore = json_decode($rootPackage->content(), true)['extra'][$forPackage]['avoid'] ?? [];
         }
 
         return (new BagUtility($ignore))->filter()->value();
@@ -45,7 +45,7 @@ class Finder
         $packages = new BagUtility($this->installedPackages());
         $ignore = $this->ignore($forPackage);
 
-        $shouldIgnoreAll = in_array('*', $ignore);
+        $shouldIgnoreAll = $ignore == "*" || in_array('*', $ignore);
 
         $mapper = fn($k, $v) => [$v['name'] => $v['extra'][$forPackage] ?? []];
 

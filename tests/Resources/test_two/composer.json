@@ -7,7 +7,7 @@
     },
     "extra": {
         "myerscode": {
-            "dont-discover": [
+            "avoid": [
                 "myerscode/test-package"
             ]
         }
