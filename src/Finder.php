@@ -51,6 +51,7 @@ class Finder
         $mapper = fn($k, $v) => [$v['name'] => $v['extra'][$forPackage] ?? []];
 
         $filter = fn($v) => count($v) > 0;
+
         $filterIgnored = fn($value, $key) => !($shouldIgnoreAll || in_array($key, $ignore));
 
         return $packages
@@ -75,6 +76,6 @@ class Finder
             throw new InvalidArgumentException("$packageName is not a known package");
         }
 
-        return str_replace('../', $this->basePath . '/', $packages[$packageName]["install-path"]);
+        return str_replace('../', $this->vendorPath() . '/', $packages[$packageName]["install-path"]);
     }
 }
