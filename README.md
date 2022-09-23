@@ -4,6 +4,8 @@
 [![Latest Stable Version](https://poser.pugx.org/myerscode/package-discovery/v/stable)](https://packagist.org/packages/myerscode/package-discovery)
 [![Total Downloads](https://poser.pugx.org/myerscode/package-discovery/downloads)](https://packagist.org/packages/myerscode/package-discovery)
 [![License](https://poser.pugx.org/myerscode/package-discovery/license)](https://packagist.org/packages/myerscode/package-discovery)
+![Tests](https://github.com/myerscode/package-discovery/workflows/tests/badge.svg?branch=main)
+
 
 ## Install
 
@@ -108,3 +110,15 @@ echo $finder->locate('myerscode/test-package');
 
 // /User/fred/project-name/vendor/myerscode/test-package
 ```
+
+## Issues
+
+Bug reports and feature requests can be submitted on the [Github Issue Tracker](https://github.com/myerscode/package-discovery/issues).
+
+## Contributing
+
+See the Myerscode [contributing](https://github.com/myerscode/docs/blob/master/contributing.md) page for information.
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
