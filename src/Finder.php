@@ -8,14 +8,14 @@ use InvalidArgumentException;
 
 class Finder
 {
-    public function __construct(readonly string $basePath)
+    public function __construct(readonly string $basePath, readonly string $vendorDirectory = 'vendor')
     {
         //
     }
 
     public function vendorPath(): string
     {
-        return $this->basePath.'/vendor';
+        return $this->basePath . '/' . $this->vendorDirectory;
     }
 
     public function installedPackages(): array
@@ -44,20 +44,15 @@ class Finder
     public function discover(string $forPackage): array
     {
         $packages = new BagUtility($this->installedPackages());
+
         $ignore = $this->ignore($forPackage);
 
         $shouldIgnoreAll = $ignore == "*" || in_array('*', $ignore);
 
-        $mapper = fn($k, $v) => [$v['name'] => $v['extra'][$forPackage] ?? []];
-
-        $filter = fn($v) => count($v) > 0;
-
-        $filterIgnored = fn($value, $key) => !($shouldIgnoreAll || in_array($key, $ignore));
-
         return $packages
-            ->mapKeys($mapper)
-            ->filter($filter)
-            ->filter($filterIgnored)
+            ->mapKeys(fn($k, $v) => [$v['name'] => $v['extra'][$forPackage] ?? []])
+            ->filter(fn($v) => count($v) > 0)
+            ->filter(fn($value, $key) => !($shouldIgnoreAll || in_array($key, $ignore)))
             ->value();
     }
 

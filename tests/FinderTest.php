@@ -79,7 +79,7 @@ class FinderTest extends TestCase
 
         $location = $finder->locate('myerscode/test-package');
 
-        $this->assertEquals(__DIR__.'/Resources/test_locate/myerscode/test-package', $location);
+        $this->assertEquals(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package', $location);
     }
 
     public function testThrowsExceptionWhenCannotLocatePackage()
