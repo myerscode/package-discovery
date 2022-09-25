@@ -100,7 +100,7 @@ If you want to avoid loading in all discoverable packages, simply add `*` in the
 
 ## Locating a package
 
-When you want to find out where a pacakge is located on the disk, you can use the `locate` method to look up its absolute 
+When you want to find out where a package is located on the disk, you can use the `locate` method to look up its absolute 
 path.
 
 ```php 
@@ -109,6 +109,42 @@ $finder = new Finder(__DIR__);
 echo $finder->locate('myerscode/test-package');
 
 // /User/fred/project-name/vendor/myerscode/test-package
+```
+
+## Getting package meta for a service
+
+To get package meta for a specific service call the `packageMetaForService` method, passing the package name and the service name.
+
+```php 
+$finder = new Finder(__DIR__);
+
+echo $finder->packageMetaForService('myerscode/test-package', 'myerscode');
+
+[
+    "corgis": ["Gerald", "Rupert"],
+    "providers": [
+        "Myerscode\\Corgis\\CorgiProvider"
+    ]
+]
+```
+
+## Getting package extra
+
+To get all the extras data for a package call the `packageExtra` method.
+
+```php 
+$finder = new Finder(__DIR__);
+
+echo $finder->packageExtra('myerscode/test-package');
+
+[
+    "myerscode" => [
+        "corgis": ["Gerald", "Rupert"],
+        "providers": [
+            "Myerscode\\Corgis\\CorgiProvider"
+        ]
+    ]
+]
 ```
 
 ## Issues
