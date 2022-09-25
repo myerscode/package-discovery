@@ -13,6 +13,7 @@
             "version": "1.0.0",
             "extra": {
                 "myerscode": {
+                    "corgis": ["Gerald", "Rupert"],
                     "providers": [
                         "Myerscode\\Testing\\TestingServiceProvider"
                     ]

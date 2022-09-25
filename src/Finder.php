@@ -13,11 +13,21 @@ class Finder
         //
     }
 
+    /**
+     * Get path to composer vendor directory
+     *
+     * @return string
+     */
     public function vendorPath(): string
     {
         return $this->basePath . '/' . $this->vendorDirectory;
     }
 
+    /**
+     * Get collection of installed pacakges
+     *
+     * @return array
+     */
     public function installedPackages(): array
     {
         $packages = [];
@@ -31,9 +41,28 @@ class Finder
         return $packages;
     }
 
+    protected function findPackage(string $packageName): array
+    {
+        $packages = (new BagUtility($this->installedPackages()))->mapKeys(fn($k, $v) => [$v['name'] => $v])->value();
+
+        if (!isset($packages[$packageName])) {
+            throw new InvalidArgumentException("$packageName is not a known package");
+        }
+
+        return $packages[$packageName];
+    }
+
+    /**
+     * Get names of packages to ignore
+     *
+     * @param  string  $forPackage
+     *
+     * @return array
+     */
     protected function ignore(string $forPackage): array
     {
         $ignore = [];
+
         if (($rootPackage = new FileUtility($this->basePath.'/composer.json'))->exists()) {
             $ignore = json_decode($rootPackage->content(), true)['extra'][$forPackage]['avoid'] ?? [];
         }
@@ -41,6 +70,13 @@ class Finder
         return (new BagUtility($ignore))->filter()->value();
     }
 
+    /**
+     * Discover packages wanting to interact with your service
+     *
+     * @param  string  $forPackage
+     *
+     * @return array
+     */
     public function discover(string $forPackage): array
     {
         $packages = new BagUtility($this->installedPackages());
@@ -65,12 +101,22 @@ class Finder
      */
     public function locate(string $packageName): string
     {
-        $packages = (new BagUtility($this->installedPackages()))->mapKeys(fn($k, $v) => [$v['name'] => $v])->value();
+        $package = $this->findPackage($packageName);
 
-        if (!isset($packages[$packageName])) {
-            throw new InvalidArgumentException("$packageName is not a known package");
-        }
+        return str_replace('../', $this->vendorPath() . '/', $package["install-path"]);
+    }
 
-        return str_replace('../', $this->vendorPath() . '/', $packages[$packageName]["install-path"]);
+    public function packageMetaForService(string $packageName, string $serviceName): array
+    {
+        $package = $this->findPackage($packageName);
+
+        return $package["extra"][$serviceName] ?? [];
+    }
+
+    public function packageExtra(string $packageName): array
+    {
+        $package = $this->findPackage($packageName);
+
+        return $package["extra"] ?? [];
     }
 }

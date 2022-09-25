@@ -92,4 +92,40 @@ class FinderTest extends TestCase
         $this->expectExceptionMessage("$packageName is not a known package");
         $finder->locate($packageName);
     }
+
+    public function testCanGetMetaForPackageUsingMetaNamespace()
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $meta = $finder->packageMetaForService('myerscode/test-package', 'myerscode');
+
+        $this->assertEquals([
+            "corgis" => ["Gerald", "Rupert"],
+            "providers" => [
+                "Myerscode\\Testing\\TestingServiceProvider"
+            ]
+        ], $meta);
+
+        $meta = $finder->packageMetaForService('myerscode/test-package', 'corgi');
+
+        $this->assertEquals([], $meta);
+    }
+
+    public function testCanGePackageExtras()
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $meta = $finder->packageExtra('myerscode/test-package');
+
+        $this->assertEquals([
+            "myerscode" => [
+                "corgis" => ["Gerald", "Rupert"],
+                "providers" => [
+                    "Myerscode\\Testing\\TestingServiceProvider"
+                ]
+            ]
+        ], $meta);
+    }
 }
