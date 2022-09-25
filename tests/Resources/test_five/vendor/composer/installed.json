@@ -1,0 +1,26 @@
+{
+    "packages": [
+        {
+            "name": "myerscode/utilities-bags",
+            "version": "2.1.0"
+        },
+        {
+            "name": "myerscode/utilities-files",
+            "version": "2.0.2"
+        },
+        {
+            "name": "myerscode/test-package",
+            "version": "1.0.0",
+            "extra": {
+                "myerscode": {
+                    "providers": [
+                        "Myerscode\\Testing\\TestingServiceProvider"
+                    ]
+                }
+            }
+        }
+    ],
+    "dev": true,
+    "dev-package-names": [
+    ]
+}

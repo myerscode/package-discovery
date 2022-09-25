@@ -1,0 +1,151 @@
+{
+    "packages": [
+        {
+            "name": "myerscode/utilities-bags",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myerscode/utilities-bags.git",
+                "reference": "f72448b9cd9270339312360eb14e992ff28de0ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/myerscode/utilities-bags/zipball/f72448b9cd9270339312360eb14e992ff28de0ed",
+                "reference": "f72448b9cd9270339312360eb14e992ff28de0ed",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.4",
+                "phpunit/phpunit": "^9.5"
+            },
+            "time": "2022-06-15T19:14:22+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Myerscode\\Utilities\\Bags\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "myerscode",
+                    "email": "team@myerscode.com",
+                    "homepage": "https://myerscode.com"
+                },
+                {
+                    "name": "Fred Myerscough",
+                    "email": "fred@myerscough.co.uk",
+                    "homepage": "https://fredmyerscough.co.uk"
+                }
+            ],
+            "description": "A PHP helper utility class for fluent interaction and manipulation with collection data using immutable bags",
+            "keywords": [
+                "array helper",
+                "arrays",
+                "chaining",
+                "collections",
+                "dot accessor",
+                "dot array",
+                "fluent",
+                "idempotent",
+                "library",
+                "objects",
+                "utility"
+            ],
+            "support": {
+                "issues": "https://github.com/myerscode/utilities-bags/issues",
+                "source": "https://github.com/myerscode/utilities-bags/tree/2.1.0"
+            },
+            "install-path": "../myerscode/utilities-bags"
+        },
+        {
+            "name": "myerscode/utilities-files",
+            "version": "2.0.2",
+            "version_normalized": "2.0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myerscode/utilities-files.git",
+                "reference": "0378bfbd0cff79a897926b3620b8e7e5652d2961"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/myerscode/utilities-files/zipball/0378bfbd0cff79a897926b3620b8e7e5652d2961",
+                "reference": "0378bfbd0cff79a897926b3620b8e7e5652d2961",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "symfony/filesystem": "^6.0",
+                "symfony/finder": "^6.0",
+                "symfony/serializer": "^6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "time": "2022-02-11T12:20:10+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Myerscode\\Utilities\\Files\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "myerscode",
+                    "email": "team@myerscode.com",
+                    "homepage": "https://myerscode.com"
+                },
+                {
+                    "name": "Fred Myerscough",
+                    "email": "fred@myerscough.co.uk",
+                    "homepage": "https://fredmyerscough.co.uk"
+                }
+            ],
+            "description": "A PHP utility class that helps with common file tasks",
+            "keywords": [
+                "chaining",
+                "directory",
+                "files",
+                "fluent",
+                "library",
+                "path",
+                "toolkit",
+                "utility"
+            ],
+            "support": {
+                "issues": "https://github.com/myerscode/utilities-files/issues",
+                "source": "https://github.com/myerscode/utilities-files/tree/2.0.2"
+            },
+            "install-path": "../myerscode/utilities-files"
+        },
+        {
+            "name": "myerscode/test-package",
+            "version": "1.0.0",
+            "extra": {
+                "myerscode": {
+                    "providers": [
+                        "Myerscode\\Testing\\TestingServiceProvider"
+                    ]
+                }
+            }
+        }
+    ],
+    "dev": true,
+    "dev-package-names": [
+    ]
+}
