@@ -28,8 +28,8 @@ want to discover it.
 
 ```json
 {
+  "name": "myerscode/corgis",
   "extra": {
-    "name": "myerscode/corgis",
     "myerscode": {
       "corgis": ["Gerald", "Rupert"],
       "providers": [
@@ -74,8 +74,8 @@ You would do this by adding the package name to `avoid` under the projects names
 
 ```json
 {
+  "name": "myerscode/demo-project",
   "extra": {
-    "name": "myerscode/demo-project",
     "myerscode": {
       "avoid": [
         "myerscode/corgis"
@@ -89,8 +89,8 @@ If you want to avoid loading in all discoverable packages, simply add `*` in the
 
 ```json
 {
+  "name": "myerscode/demo-project",
   "extra": {
-    "name": "myerscode/demo-project",
     "myerscode": {
       "avoid": [ "*" ]
     }
