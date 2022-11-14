@@ -1,7 +1,9 @@
 {
     "name": "myerscode/package-discovery",
-    "description": "A package to help find plugins for packages",
+    "description": "A package to help find plugins for your product through Composer meta data!",
+    "keywords": ["composer", "discovery", "meta", "plugins"],
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Fred Myerscough",
