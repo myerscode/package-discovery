@@ -5,6 +5,7 @@
 [![Total Downloads](https://poser.pugx.org/myerscode/package-discovery/downloads)](https://packagist.org/packages/myerscode/package-discovery)
 [![License](https://poser.pugx.org/myerscode/package-discovery/license)](https://packagist.org/packages/myerscode/package-discovery)
 ![Tests](https://github.com/myerscode/package-discovery/workflows/tests/badge.svg?branch=main)
+[![codecov](https://codecov.io/gh/myerscode/package-discovery/graph/badge.svg?token=YR0YHVERNV)](https://codecov.io/gh/myerscode/package-discovery)
 
 
 ## Install
