@@ -3,12 +3,13 @@
 namespace Tests;
 
 use Myerscode\PackageDiscovery\Finder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
 
 class FinderTest extends TestCase
 {
-    public function __discoverData(): array
+    public static function __discoverData(): array
     {
         return [
             [
@@ -58,10 +59,8 @@ class FinderTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider  __discoverData
-     */
-    public function testFindsDiscoverablePackages($location, $discover, $found): void
+    #[DataProvider('__discoverData')]
+    public function testFindsDiscoverablePackages(string $location, string $discover, int $found): void
     {
         $basePath = __DIR__.'/Resources/'.$location;
 
@@ -72,7 +71,7 @@ class FinderTest extends TestCase
         $this->assertCount($found, $discovered);
     }
 
-    public function testCanLocatePackage()
+    public function testCanLocatePackage(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';
         $finder = new Finder($basePath);
@@ -82,18 +81,18 @@ class FinderTest extends TestCase
         $this->assertEquals(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package', $location);
     }
 
-    public function testThrowsExceptionWhenCannotLocatePackage()
+    public function testThrowsExceptionWhenCannotLocatePackage(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';
         $finder = new Finder($basePath);
         $packageName = 'myerscode/does-not-exists-package';
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("$packageName is not a known package");
+        $this->expectExceptionMessage($packageName . ' is not a known package');
         $finder->locate($packageName);
     }
 
-    public function testCanGetMetaForPackageUsingMetaNamespace()
+    public function testCanGetMetaForPackageUsingMetaNamespace(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';
         $finder = new Finder($basePath);
@@ -112,7 +111,7 @@ class FinderTest extends TestCase
         $this->assertEquals([], $meta);
     }
 
-    public function testCanGePackageExtras()
+    public function testCanGePackageExtras(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';
         $finder = new Finder($basePath);

@@ -6,17 +6,15 @@ use Myerscode\Utilities\Files\Utility as FileUtility;
 use Myerscode\Utilities\Bags\Utility as BagUtility;
 use InvalidArgumentException;
 
-class Finder
+readonly class Finder
 {
-    public function __construct(readonly string $basePath, readonly string $vendorDirectory = 'vendor')
+    public function __construct(public string $basePath, public string $vendorDirectory = 'vendor')
     {
         //
     }
 
     /**
      * Get path to composer vendor directory
-     *
-     * @return string
      */
     public function vendorPath(): string
     {
@@ -25,8 +23,6 @@ class Finder
 
     /**
      * Get collection of installed pacakges
-     *
-     * @return array
      */
     public function installedPackages(): array
     {
@@ -46,7 +42,7 @@ class Finder
         $packages = (new BagUtility($this->installedPackages()))->mapKeys(fn($k, $v) => [$v['name'] => $v])->value();
 
         if (!isset($packages[$packageName])) {
-            throw new InvalidArgumentException("$packageName is not a known package");
+            throw new InvalidArgumentException($packageName . ' is not a known package');
         }
 
         return $packages[$packageName];
@@ -55,9 +51,7 @@ class Finder
     /**
      * Get names of packages to ignore
      *
-     * @param  string  $forPackage
      *
-     * @return array
      */
     protected function ignore(string $forPackage): array
     {
@@ -73,9 +67,7 @@ class Finder
     /**
      * Discover packages wanting to interact with your service
      *
-     * @param  string  $forPackage
      *
-     * @return array
      */
     public function discover(string $forPackage): array
     {
@@ -87,17 +79,15 @@ class Finder
 
         return $packages
             ->mapKeys(fn($k, $v) => [$v['name'] => $v['extra'][$forPackage] ?? []])
-            ->filter(fn($v) => count($v) > 0)
-            ->filter(fn($value, $key) => !($shouldIgnoreAll || in_array($key, $ignore)))
+            ->filter(fn($v): bool => count($v) > 0)
+            ->filter(fn($value, $key): bool => !$shouldIgnoreAll && !in_array($key, $ignore))
             ->value();
     }
 
     /**
      * Get the absolute location of package
      *
-     * @param  string  $packageName
      *
-     * @return string
      */
     public function locate(string $packageName): string
     {
