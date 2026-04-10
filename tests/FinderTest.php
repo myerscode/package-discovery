@@ -42,6 +42,18 @@ final class FinderTest extends TestCase
         ];
     }
 
+    public function testCanGetInstalledPackageNames(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $names = $finder->installedPackageNames();
+
+        $this->assertIsArray($names);
+        $this->assertContains('myerscode/test-package', $names);
+        $this->assertContains('myerscode/utilities-bags', $names);
+    }
+
     public function testCanCheckIfPackageIsInstalled(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';

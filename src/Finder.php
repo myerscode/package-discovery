@@ -43,6 +43,19 @@ class Finder
     }
 
     /**
+     * Get names of all installed packages
+     *
+     * @return array<int, string>
+     */
+    public function installedPackageNames(): array
+    {
+        return array_values(array_map(
+            fn (array $package): string => $package['name'],
+            $this->installedPackages(),
+        ));
+    }
+
+    /**
      * Check if a package is installed
      */
     public function has(string $packageName): bool
