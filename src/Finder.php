@@ -103,13 +103,13 @@ readonly class Finder
      */
     protected function findPackage(string $packageName): array
     {
-        $packages = new BagUtility($this->installedPackages())->mapKeys(fn ($k, $v): array => [$v['name'] => $v])->value();
-
-        if (!isset($packages[$packageName])) {
-            throw new InvalidArgumentException($packageName . ' is not a known package');
+        foreach ($this->installedPackages() as $package) {
+            if ($package['name'] === $packageName) {
+                return $package;
+            }
         }
 
-        return $packages[$packageName];
+        throw new InvalidArgumentException($packageName . ' is not a known package');
     }
 
     /**
