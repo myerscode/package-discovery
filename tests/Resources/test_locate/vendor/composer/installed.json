@@ -11,6 +11,7 @@
         {
             "name": "myerscode/test-package",
             "version": "1.0.0",
+            "type": "composer-plugin",
             "extra": {
                 "myerscode": {
                     "corgis": ["Gerald", "Rupert"],

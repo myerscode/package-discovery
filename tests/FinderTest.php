@@ -42,6 +42,26 @@ final class FinderTest extends TestCase
         ];
     }
 
+    public function testCanDiscoverPackagesByType(): void
+    {
+        $basePath = __DIR__.'/Resources/test_one';
+        $finder = new Finder($basePath);
+
+        $plugins = $finder->discoverByType('composer-plugin', 'myerscode');
+        $this->assertArrayHasKey('myerscode/test-package', $plugins);
+
+        $libraries = $finder->discoverByType('library', 'myerscode');
+        $this->assertSame([], $libraries);
+    }
+
+    public function testDiscoverByTypeReturnsEmptyForUnknownType(): void
+    {
+        $basePath = __DIR__.'/Resources/test_one';
+        $finder = new Finder($basePath);
+
+        $this->assertSame([], $finder->discoverByType('unknown-type', 'myerscode'));
+    }
+
     public function testCanDiscoverMultipleNamespacesAtOnce(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';

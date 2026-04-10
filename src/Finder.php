@@ -56,6 +56,29 @@ class Finder
     }
 
     /**
+     * Discover packages of a specific Composer type wanting to interact with your service
+     *
+     * @param string|array<int, string> $forPackage
+     * @return array<string, array<string, mixed>>
+     */
+    public function discoverByType(string $type, string|array $forPackage): array
+    {
+        return array_filter(
+            $this->discover($forPackage),
+            function (mixed $meta, string $packageName) use ($type): bool {
+                foreach ($this->installedPackages() as $package) {
+                    if ($package['name'] === $packageName) {
+                        return ($package['type'] ?? '') === $type;
+                    }
+                }
+
+                return false;
+            },
+            ARRAY_FILTER_USE_BOTH,
+        );
+    }
+
+    /**
      * Discover all packages that have any extra metadata
      *
      * @return array<string, array<string, mixed>>
