@@ -15,22 +15,18 @@
 
 ## Install
 
-You can install this package via composer:
-
-``` bash
+```bash
 composer require myerscode/package-discovery
 ```
 
 ## Usage
 
-Publishing projects just need to add appropriate metadata in their package, which can be then detected by a consuming 
-project. A project which wants to disover projects will need to instantiate a `Finder` to look up the project namespace.
-You will then be able to consume the found metadata in the project as desired.
+Publishing projects add metadata to their `composer.json` `extra` field. A consuming project instantiates a `Finder`
+and uses it to discover, inspect, and locate those packages.
 
-### Publishing project
+### Publishing a package
 
-In your `package.json` file, add a object in the `extras` object, with a key that relates to the project namespace you
-want to discover it.
+Add an object under your namespace key in the `extra` field of `composer.json`:
 
 ```json
 {
@@ -46,111 +42,161 @@ want to discover it.
 }
 ```
 
-### Consuming project
+### Discovering packages
 
-Using the `Finder` class, initiate passing in the root path, relative to the `vendor` directory.
-
-Then use the `discover` method to find all packages that have the given name in its extras field.
+Pass the root path of your project (where `vendor/` lives) to `Finder`, then call `discover()` with your namespace.
 
 ```php
 $finder = new Finder(__DIR__);
 
-// would find all installed packages that have a myerscode namespace in the extras
 $packages = $finder->discover('myerscode');
 ```
 
-After discovering package you would have an array of metadata for each one discovered.
+Returns an array keyed by package name:
 
 ```php
 [
-  "myerscode/corgis" => [
-      "corgis": ["Gerald", "Rupert"],
-      "providers": [
-        "Myerscode\\Corgis\\CorgiProvider"
-      ]
-  ]
+    'myerscode/corgis' => [
+        'corgis' => ['Gerald', 'Rupert'],
+        'providers' => ['Myerscode\\Corgis\\CorgiProvider'],
+    ],
 ]
+```
+
+You can also discover across multiple namespaces at once by passing an array. Results are merged by package name:
+
+```php
+$packages = $finder->discover(['myerscode', 'corgi']);
 ```
 
 ### Avoiding discovery
 
-If you don't want to discover a specific project, then you can add some metadata in the consuming package to prevent this.
-
-You would do this by adding the package name to `avoid` under the projects namespace in the extras field of `package.json`.
+To exclude a specific package from discovery, add it to the `avoid` list under your namespace in the consuming
+project's `composer.json`:
 
 ```json
 {
   "name": "myerscode/demo-project",
   "extra": {
     "myerscode": {
-      "avoid": [
-        "myerscode/corgis"
-      ]
+      "avoid": ["myerscode/corgis"]
     }
   }
 }
 ```
 
-If you want to avoid loading in all discoverable packages, simply add `*` in the avoid field.
+To skip all discoverable packages entirely, use `*`:
 
 ```json
 {
   "name": "myerscode/demo-project",
   "extra": {
     "myerscode": {
-      "avoid": [ "*" ]
+      "avoid": ["*"]
     }
   }
 }
+```
+
+### Discovering all packages with extras
+
+`discoverAll()` returns every installed package that has any `extra` metadata, regardless of namespace:
+
+```php
+$packages = $finder->discoverAll();
+
+// [
+//     'myerscode/corgis' => [
+//         'myerscode' => [...],
+//     ],
+// ]
+```
+
+### Discovering by Composer package type
+
+`discoverByType()` filters discovery results to packages of a specific Composer `type`:
+
+```php
+// Only return packages of type "composer-plugin" that register under the myerscode namespace
+$plugins = $finder->discoverByType('composer-plugin', 'myerscode');
+
+// Also works with multiple namespaces
+$plugins = $finder->discoverByType('composer-plugin', ['myerscode', 'corgi']);
+```
+
+## Checking if a package is installed
+
+`has()` returns `true` if the named package is present in the installed packages list:
+
+```php
+if ($finder->has('myerscode/corgis')) {
+    // package is installed
+}
+```
+
+## Listing installed package names
+
+`installedPackageNames()` returns a flat array of all installed package names:
+
+```php
+$names = $finder->installedPackageNames();
+
+// ['myerscode/utilities-bags', 'myerscode/corgis', ...]
 ```
 
 ## Locating a package
 
-When you want to find out where a package is located on the disk, you can use the `locate` method to look up its absolute 
-path.
+`locate()` returns the absolute path to a package on disk. Throws `PackageNotFoundException` if the package is
+unknown or its directory cannot be resolved:
 
-```php 
-$finder = new Finder(__DIR__);
+```php
+$path = $finder->locate('myerscode/corgis');
 
-echo $finder->locate('myerscode/test-package');
+// /var/www/project/vendor/myerscode/corgis
+```
 
-// /User/fred/project-name/vendor/myerscode/test-package
+## Getting package extras
+
+`packageExtra()` returns the full `extra` array for a package:
+
+```php
+$extra = $finder->packageExtra('myerscode/corgis');
+
+// [
+//     'myerscode' => [
+//         'corgis' => ['Gerald', 'Rupert'],
+//         'providers' => ['Myerscode\\Corgis\\CorgiProvider'],
+//     ],
+// ]
 ```
 
 ## Getting package meta for a service
 
-To get package meta for a specific service call the `packageMetaForService` method, passing the package name and the service name.
+`packageMetaForService()` returns only the `extra` data scoped to a specific namespace key:
 
-```php 
-$finder = new Finder(__DIR__);
+```php
+$meta = $finder->packageMetaForService('myerscode/corgis', 'myerscode');
 
-echo $finder->packageMetaForService('myerscode/test-package', 'myerscode');
-
-[
-    "corgis": ["Gerald", "Rupert"],
-    "providers": [
-        "Myerscode\\Corgis\\CorgiProvider"
-    ]
-]
+// [
+//     'corgis' => ['Gerald', 'Rupert'],
+//     'providers' => ['Myerscode\\Corgis\\CorgiProvider'],
+// ]
 ```
 
-## Getting package extra
+## Exceptions
 
-To get all the extras data for a package call the `packageExtra` method.
+All lookup methods (`locate`, `packageExtra`, `packageMetaForService`) throw
+`Myerscode\PackageDiscovery\Exceptions\PackageNotFoundException` when the requested package is not found.
+`PackageNotFoundException` extends `InvalidArgumentException`, so existing catch blocks continue to work.
 
-```php 
-$finder = new Finder(__DIR__);
+```php
+use Myerscode\PackageDiscovery\Exceptions\PackageNotFoundException;
 
-echo $finder->packageExtra('myerscode/test-package');
-
-[
-    "myerscode" => [
-        "corgis": ["Gerald", "Rupert"],
-        "providers": [
-            "Myerscode\\Corgis\\CorgiProvider"
-        ]
-    ]
-]
+try {
+    $path = $finder->locate('vendor/unknown-package');
+} catch (PackageNotFoundException $e) {
+    // handle missing package
+}
 ```
 
 ## Issues
