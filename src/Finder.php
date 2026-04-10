@@ -19,12 +19,25 @@ class Finder
     }
 
     /**
-     * Discover packages wanting to interact with your service
+     * Discover packages wanting to interact with your service.
+     * Accepts a single namespace string or an array of namespaces.
      *
+     * @param string|array<int, string> $forPackage
      * @return array<string, array<string, mixed>>
      */
-    public function discover(string $forPackage): array
+    public function discover(string|array $forPackage): array
     {
+        if (is_array($forPackage)) {
+            $result = [];
+            foreach ($forPackage as $namespace) {
+                foreach ($this->discover($namespace) as $name => $meta) {
+                    $result[$name] = array_merge($result[$name] ?? [], $meta);
+                }
+            }
+
+            return $result;
+        }
+
         $utility = new BagUtility($this->installedPackages());
 
         $ignore = $this->ignore($forPackage);

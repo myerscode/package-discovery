@@ -42,6 +42,25 @@ final class FinderTest extends TestCase
         ];
     }
 
+    public function testCanDiscoverMultipleNamespacesAtOnce(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $discovered = $finder->discover(['myerscode', 'corgi']);
+
+        $this->assertArrayHasKey('myerscode/test-package', $discovered);
+        $this->assertCount(1, $discovered);
+    }
+
+    public function testDiscoverWithArrayReturnsEmptyForUnknownNamespaces(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $this->assertSame([], $finder->discover(['unknown-ns']));
+    }
+
     public function testCanDiscoverAllPackagesWithExtras(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';
@@ -97,6 +116,9 @@ final class FinderTest extends TestCase
                     'Myerscode\\Testing\\TestingServiceProvider',
                 ],
             ],
+            'corgi' => [
+                'names' => ['Gerald', 'Rupert'],
+            ],
         ], $meta);
     }
 
@@ -116,7 +138,7 @@ final class FinderTest extends TestCase
 
         $meta = $finder->packageMetaForService('myerscode/test-package', 'corgi');
 
-        $this->assertSame([], $meta);
+        $this->assertSame(['names' => ['Gerald', 'Rupert']], $meta);
     }
 
     public function testCanLocatePackage(): void

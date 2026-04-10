@@ -17,6 +17,9 @@
                     "providers": [
                         "Myerscode\\Testing\\TestingServiceProvider"
                     ]
+                },
+                "corgi": {
+                    "names": ["Gerald", "Rupert"]
                 }
             },
             "install-path": "../myerscode/test-package"
