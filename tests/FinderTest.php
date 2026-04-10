@@ -12,7 +12,7 @@ use Iterator;
 
 final class FinderTest extends TestCase
 {
-    public static function __discoverData(): Iterator
+    public static function discoverDataProvider(): Iterator
     {
         yield [
             'test_one',
@@ -108,7 +108,7 @@ final class FinderTest extends TestCase
     }
 
 
-    #[DataProvider('__discoverData')]
+    #[DataProvider('discoverDataProvider')]
     public function testFindsDiscoverablePackages(string $location, string $discover, int $found): void
     {
         $basePath = __DIR__.'/Resources/'.$location;
