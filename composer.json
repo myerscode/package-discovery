@@ -14,11 +14,11 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.4",
-        "myerscode/utilities-bags": "^2025",
-        "myerscode/utilities-files": "^2025"
+        "myerscode/utilities-bags": "^2026",
+        "myerscode/utilities-files": "^2026"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.5"
+        "phpunit/phpunit": "^13.0"
     },
     "autoload": {
         "psr-4": {
