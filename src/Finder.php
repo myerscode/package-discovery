@@ -28,10 +28,14 @@ readonly class Finder
 
         $shouldIgnoreAll = in_array('*', $ignore);
 
+        if ($shouldIgnoreAll) {
+            return [];
+        }
+
         return $utility
             ->mapKeys(fn ($k, $v): array => [$v['name'] => $v['extra'][$forPackage] ?? []])
             ->filter(fn ($v): bool => count($v) > 0)
-            ->filter(fn ($value, $key): bool => !$shouldIgnoreAll && !in_array($key, $ignore))
+            ->filter(fn ($value, $key): bool => !in_array($key, $ignore))
             ->value();
     }
 
