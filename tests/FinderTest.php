@@ -42,6 +42,26 @@ final class FinderTest extends TestCase
         ];
     }
 
+    public function testCanDiscoverAllPackagesWithExtras(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $all = $finder->discoverAll();
+
+        $this->assertIsArray($all);
+        $this->assertArrayHasKey('myerscode/test-package', $all);
+        $this->assertArrayNotHasKey('myerscode/utilities-bags', $all);
+    }
+
+    public function testDiscoverAllReturnsEmptyWhenNoPackagesHaveExtras(): void
+    {
+        $basePath = __DIR__.'/Resources';
+        $finder = new Finder($basePath);
+
+        $this->assertSame([], $finder->discoverAll());
+    }
+
     public function testCanGetInstalledPackageNames(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';

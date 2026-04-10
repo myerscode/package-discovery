@@ -43,6 +43,24 @@ class Finder
     }
 
     /**
+     * Discover all packages that have any extra metadata
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function discoverAll(): array
+    {
+        $result = [];
+
+        foreach ($this->installedPackages() as $package) {
+            if (!empty($package['extra'])) {
+                $result[$package['name']] = $package['extra'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get names of all installed packages
      *
      * @return array<int, string>
