@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        php-versions: [ '8.4' ]
+        php-versions: [ '8.5' ]
 
     name: PHP ${{ matrix.php-versions }} - ${{ matrix.os }}
     steps:

@@ -13,7 +13,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.4",
+        "php": "^8.5",
         "myerscode/utilities-bags": "^2026",
         "myerscode/utilities-files": "^2026"
     },
