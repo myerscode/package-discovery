@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Myerscode\PackageDiscovery\Exceptions\PackageNotFoundException;
 use Myerscode\PackageDiscovery\Finder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -135,9 +136,22 @@ final class FinderTest extends TestCase
         $finder = new Finder($basePath);
         $packageName = 'myerscode/does-not-exists-package';
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(PackageNotFoundException::class);
         $this->expectExceptionMessage($packageName . ' is not a known package');
         $finder->locate($packageName);
+    }
+
+    public function testPackageNotFoundExceptionExtendsInvalidArgumentException(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        try {
+            $finder->locate('myerscode/does-not-exists-package');
+            $this->fail('Expected exception was not thrown');
+        } catch (InvalidArgumentException $e) {
+            $this->assertInstanceOf(PackageNotFoundException::class, $e);
+        }
     }
 
     public function testThrowsExceptionWhenPackagePathCannotBeResolved(): void
@@ -145,7 +159,7 @@ final class FinderTest extends TestCase
         $basePath = __DIR__.'/Resources/test_locate';
         $finder = new Finder($basePath);
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(PackageNotFoundException::class);
         $this->expectExceptionMessage('Could not resolve path for package: myerscode/ghost-package');
         $finder->locate('myerscode/ghost-package');
     }

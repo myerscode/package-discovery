@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Myerscode\PackageDiscovery;
 
-use InvalidArgumentException;
+use Myerscode\PackageDiscovery\Exceptions\PackageNotFoundException;
 use Myerscode\Utilities\Bags\Utility as BagUtility;
 use Myerscode\Utilities\Files\Utility as FileUtility;
 
@@ -77,7 +77,7 @@ class Finder
         $resolved = realpath($this->vendorPath() . '/composer/' . $package['install-path']);
 
         if ($resolved === false) {
-            throw new InvalidArgumentException('Could not resolve path for package: ' . $packageName);
+            throw new PackageNotFoundException('Could not resolve path for package: ' . $packageName);
         }
 
         return $resolved;
@@ -122,7 +122,7 @@ class Finder
             }
         }
 
-        throw new InvalidArgumentException($packageName . ' is not a known package');
+        throw PackageNotFoundException::forPackage($packageName);
     }
 
     /**
