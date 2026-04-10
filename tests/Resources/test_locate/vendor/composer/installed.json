@@ -20,6 +20,11 @@
                 }
             },
             "install-path": "../myerscode/test-package"
+        },
+        {
+            "name": "myerscode/ghost-package",
+            "version": "1.0.0",
+            "install-path": "../myerscode/ghost-package"
         }
     ],
     "dev": true,

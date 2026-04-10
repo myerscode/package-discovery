@@ -67,7 +67,13 @@ readonly class Finder
     {
         $package = $this->findPackage($packageName);
 
-        return str_replace('../', $this->vendorPath() . '/', $package['install-path']);
+        $resolved = realpath($this->vendorPath() . '/composer/' . $package['install-path']);
+
+        if ($resolved === false) {
+            throw new InvalidArgumentException('Could not resolve path for package: ' . $packageName);
+        }
+
+        return $resolved;
     }
 
     /**

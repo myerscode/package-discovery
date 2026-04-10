@@ -128,4 +128,14 @@ final class FinderTest extends TestCase
         $this->expectExceptionMessage($packageName . ' is not a known package');
         $finder->locate($packageName);
     }
+
+    public function testThrowsExceptionWhenPackagePathCannotBeResolved(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Could not resolve path for package: myerscode/ghost-package');
+        $finder->locate('myerscode/ghost-package');
+    }
 }
