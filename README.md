@@ -3,10 +3,15 @@
 
 [![Latest Stable Version](https://poser.pugx.org/myerscode/package-discovery/v/stable)](https://packagist.org/packages/myerscode/package-discovery)
 [![Total Downloads](https://poser.pugx.org/myerscode/package-discovery/downloads)](https://packagist.org/packages/myerscode/package-discovery)
-[![License](https://poser.pugx.org/myerscode/package-discovery/license)](https://packagist.org/packages/myerscode/package-discovery)
-![Tests](https://github.com/myerscode/package-discovery/actions/workflows/tests.yml/badge.svg?branch=main)
-[![codecov](https://codecov.io/gh/myerscode/package-discovery/graph/badge.svg?token=YR0YHVERNV)](https://codecov.io/gh/myerscode/utilities-strings)
+[![PHP Version Require](http://poser.pugx.org/myerscode/package-discovery/require/php)](https://packagist.org/packages/myerscode/package-discovery)
+[![License](https://poser.pugx.org/myerscode/package-discovery/license)](https://github.com/myerscode/package-discovery/blob/main/LICENSE)
+[![Tests](https://github.com/myerscode/package-discovery/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/myerscode/package-discovery/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/myerscode/package-discovery/graph/badge.svg)](https://codecov.io/gh/myerscode/package-discovery)
 
+
+## Requirements
+
+- PHP ^8.4
 
 ## Install
 
