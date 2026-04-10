@@ -26,7 +26,7 @@ readonly class Finder
 
         $ignore = $this->ignore($forPackage);
 
-        $shouldIgnoreAll = $ignore == '*' || in_array('*', $ignore);
+        $shouldIgnoreAll = in_array('*', $ignore);
 
         return $utility
             ->mapKeys(fn ($k, $v): array => [$v['name'] => $v['extra'][$forPackage] ?? []])
