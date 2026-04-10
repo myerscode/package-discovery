@@ -42,43 +42,13 @@ final class FinderTest extends TestCase
         ];
     }
 
-    public function testCanDiscoverPackagesByType(): void
-    {
-        $basePath = __DIR__.'/Resources/test_one';
-        $finder = new Finder($basePath);
-
-        $plugins = $finder->discoverByType('composer-plugin', 'myerscode');
-        $this->assertArrayHasKey('myerscode/test-package', $plugins);
-
-        $libraries = $finder->discoverByType('library', 'myerscode');
-        $this->assertSame([], $libraries);
-    }
-
-    public function testDiscoverByTypeReturnsEmptyForUnknownType(): void
-    {
-        $basePath = __DIR__.'/Resources/test_one';
-        $finder = new Finder($basePath);
-
-        $this->assertSame([], $finder->discoverByType('unknown-type', 'myerscode'));
-    }
-
-    public function testCanDiscoverMultipleNamespacesAtOnce(): void
+    public function testCanCheckIfPackageIsInstalled(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';
         $finder = new Finder($basePath);
 
-        $discovered = $finder->discover(['myerscode', 'corgi']);
-
-        $this->assertArrayHasKey('myerscode/test-package', $discovered);
-        $this->assertCount(1, $discovered);
-    }
-
-    public function testDiscoverWithArrayReturnsEmptyForUnknownNamespaces(): void
-    {
-        $basePath = __DIR__.'/Resources/test_locate';
-        $finder = new Finder($basePath);
-
-        $this->assertSame([], $finder->discover(['unknown-ns']));
+        $this->assertTrue($finder->has('myerscode/test-package'));
+        $this->assertFalse($finder->has('myerscode/not-a-package'));
     }
 
     public function testCanDiscoverAllPackagesWithExtras(): void
@@ -93,33 +63,27 @@ final class FinderTest extends TestCase
         $this->assertArrayNotHasKey('myerscode/utilities-bags', $all);
     }
 
-    public function testDiscoverAllReturnsEmptyWhenNoPackagesHaveExtras(): void
-    {
-        $basePath = __DIR__.'/Resources';
-        $finder = new Finder($basePath);
-
-        $this->assertSame([], $finder->discoverAll());
-    }
-
-    public function testCanGetInstalledPackageNames(): void
+    public function testCanDiscoverMultipleNamespacesAtOnce(): void
     {
         $basePath = __DIR__.'/Resources/test_locate';
         $finder = new Finder($basePath);
 
-        $names = $finder->installedPackageNames();
+        $discovered = $finder->discover(['myerscode', 'corgi']);
 
-        $this->assertIsArray($names);
-        $this->assertContains('myerscode/test-package', $names);
-        $this->assertContains('myerscode/utilities-bags', $names);
+        $this->assertArrayHasKey('myerscode/test-package', $discovered);
+        $this->assertCount(1, $discovered);
     }
 
-    public function testCanCheckIfPackageIsInstalled(): void
+    public function testCanDiscoverPackagesByType(): void
     {
-        $basePath = __DIR__.'/Resources/test_locate';
+        $basePath = __DIR__.'/Resources/test_one';
         $finder = new Finder($basePath);
 
-        $this->assertTrue($finder->has('myerscode/test-package'));
-        $this->assertFalse($finder->has('myerscode/not-a-package'));
+        $plugins = $finder->discoverByType('composer-plugin', 'myerscode');
+        $this->assertArrayHasKey('myerscode/test-package', $plugins);
+
+        $libraries = $finder->discoverByType('library', 'myerscode');
+        $this->assertSame([], $libraries);
     }
 
     public function testCanGePackageExtras(): void
@@ -140,6 +104,18 @@ final class FinderTest extends TestCase
                 'names' => ['Gerald', 'Rupert'],
             ],
         ], $meta);
+    }
+
+    public function testCanGetInstalledPackageNames(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $names = $finder->installedPackageNames();
+
+        $this->assertIsArray($names);
+        $this->assertContains('myerscode/test-package', $names);
+        $this->assertContains('myerscode/utilities-bags', $names);
     }
 
     public function testCanGetMetaForPackageUsingMetaNamespace(): void
@@ -180,15 +156,28 @@ final class FinderTest extends TestCase
         $this->assertGreaterThan(0, count($installed));
     }
 
-    public function testInstalledPackagesAreCached(): void
+    public function testDiscoverAllReturnsEmptyWhenNoPackagesHaveExtras(): void
     {
-        $basePath = __DIR__.'/../';
+        $basePath = __DIR__.'/Resources';
         $finder = new Finder($basePath);
 
-        $first = $finder->installedPackages();
-        $second = $finder->installedPackages();
+        $this->assertSame([], $finder->discoverAll());
+    }
 
-        $this->assertSame($first, $second);
+    public function testDiscoverByTypeReturnsEmptyForUnknownType(): void
+    {
+        $basePath = __DIR__.'/Resources/test_one';
+        $finder = new Finder($basePath);
+
+        $this->assertSame([], $finder->discoverByType('unknown-type', 'myerscode'));
+    }
+
+    public function testDiscoverWithArrayReturnsEmptyForUnknownNamespaces(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $this->assertSame([], $finder->discover(['unknown-ns']));
     }
 
 
@@ -213,15 +202,15 @@ final class FinderTest extends TestCase
         $this->assertCount(0, $installed);
     }
 
-    public function testThrowsExceptionWhenCannotLocatePackage(): void
+    public function testInstalledPackagesAreCached(): void
     {
-        $basePath = __DIR__.'/Resources/test_locate';
+        $basePath = __DIR__.'/../';
         $finder = new Finder($basePath);
-        $packageName = 'myerscode/does-not-exists-package';
 
-        $this->expectException(PackageNotFoundException::class);
-        $this->expectExceptionMessage($packageName . ' is not a known package');
-        $finder->locate($packageName);
+        $first = $finder->installedPackages();
+        $second = $finder->installedPackages();
+
+        $this->assertSame($first, $second);
     }
 
     public function testPackageNotFoundExceptionExtendsInvalidArgumentException(): void
@@ -235,6 +224,17 @@ final class FinderTest extends TestCase
         } catch (InvalidArgumentException $e) {
             $this->assertInstanceOf(PackageNotFoundException::class, $e);
         }
+    }
+
+    public function testThrowsExceptionWhenCannotLocatePackage(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+        $packageName = 'myerscode/does-not-exists-package';
+
+        $this->expectException(PackageNotFoundException::class);
+        $this->expectExceptionMessage($packageName . ' is not a known package');
+        $finder->locate($packageName);
     }
 
     public function testThrowsExceptionWhenPackagePathCannotBeResolved(): void

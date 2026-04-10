@@ -56,29 +56,6 @@ class Finder
     }
 
     /**
-     * Discover packages of a specific Composer type wanting to interact with your service
-     *
-     * @param string|array<int, string> $forPackage
-     * @return array<string, array<string, mixed>>
-     */
-    public function discoverByType(string $type, string|array $forPackage): array
-    {
-        return array_filter(
-            $this->discover($forPackage),
-            function (mixed $meta, string $packageName) use ($type): bool {
-                foreach ($this->installedPackages() as $package) {
-                    if ($package['name'] === $packageName) {
-                        return ($package['type'] ?? '') === $type;
-                    }
-                }
-
-                return false;
-            },
-            ARRAY_FILTER_USE_BOTH,
-        );
-    }
-
-    /**
      * Discover all packages that have any extra metadata
      *
      * @return array<string, array<string, mixed>>
@@ -97,16 +74,19 @@ class Finder
     }
 
     /**
-     * Get names of all installed packages
+     * Discover packages of a specific Composer type wanting to interact with your service
      *
-     * @return array<int, string>
+     * @param string|array<int, string> $forPackage
+     * @return array<string, array<string, mixed>>
      */
-    public function installedPackageNames(): array
+    public function discoverByType(string $type, string|array $forPackage): array
     {
-        return array_values(array_map(
-            fn (array $package): string => $package['name'],
-            $this->installedPackages(),
-        ));
+        return array_filter(
+            $this->discover($forPackage),
+            fn (mixed $meta, string $packageName): bool => $this->has($packageName)
+                && ($this->findPackage($packageName)['type'] ?? '') === $type,
+            ARRAY_FILTER_USE_BOTH,
+        );
     }
 
     /**
@@ -121,6 +101,19 @@ class Finder
         }
 
         return false;
+    }
+
+    /**
+     * Get names of all installed packages
+     *
+     * @return array<int, string>
+     */
+    public function installedPackageNames(): array
+    {
+        return array_values(array_map(
+            fn (array $package): string => $package['name'],
+            $this->installedPackages(),
+        ));
     }
 
     /**
