@@ -8,9 +8,12 @@ use InvalidArgumentException;
 use Myerscode\Utilities\Bags\Utility as BagUtility;
 use Myerscode\Utilities\Files\Utility as FileUtility;
 
-readonly class Finder
+class Finder
 {
-    public function __construct(public string $basePath, public string $vendorDirectory = 'vendor')
+    /** @var array<int, array<string, mixed>>|null */
+    private ?array $cachedPackages = null;
+
+    public function __construct(public readonly string $basePath, public readonly string $vendorDirectory = 'vendor')
     {
         //
     }
@@ -46,6 +49,10 @@ readonly class Finder
      */
     public function installedPackages(): array
     {
+        if ($this->cachedPackages !== null) {
+            return $this->cachedPackages;
+        }
+
         $packages = [];
 
         if (($utility = new FileUtility($this->vendorPath() . '/composer/installed.json'))->exists()) {
@@ -57,7 +64,7 @@ readonly class Finder
             }
         }
 
-        return $packages;
+        return $this->cachedPackages = $packages;
     }
 
     /**

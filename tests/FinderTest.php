@@ -96,6 +96,17 @@ final class FinderTest extends TestCase
         $this->assertGreaterThan(0, count($installed));
     }
 
+    public function testInstalledPackagesAreCached(): void
+    {
+        $basePath = __DIR__.'/../';
+        $finder = new Finder($basePath);
+
+        $first = $finder->installedPackages();
+        $second = $finder->installedPackages();
+
+        $this->assertSame($first, $second);
+    }
+
 
     #[DataProvider('__discoverData')]
     public function testFindsDiscoverablePackages(string $location, string $discover, int $found): void
