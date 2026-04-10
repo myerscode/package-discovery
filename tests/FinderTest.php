@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests;
 
 use Myerscode\PackageDiscovery\Finder;
@@ -7,36 +9,34 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
 
-class FinderTest extends TestCase
+final class FinderTest extends TestCase
 {
-    public static function __discoverData(): array
+    public static function __discoverData(): \Iterator
     {
-        return [
-            [
-                'test_one',
-                'myerscode',
-                1,
-            ],
-            [
-                'test_two',
-                'corgi',
-                0,
-            ],
-            [
-                'test_three',
-                'myerscode',
-                0,
-            ],
-            [
-                'test_four',
-                'myerscode',
-                0,
-            ],
-            [
-                'test_five',
-                'myerscode',
-                0,
-            ],
+        yield [
+            'test_one',
+            'myerscode',
+            1,
+        ];
+        yield [
+            'test_two',
+            'corgi',
+            0,
+        ];
+        yield [
+            'test_three',
+            'myerscode',
+            0,
+        ];
+        yield [
+            'test_four',
+            'myerscode',
+            0,
+        ];
+        yield [
+            'test_five',
+            'myerscode',
+            0,
         ];
     }
 
@@ -78,7 +78,7 @@ class FinderTest extends TestCase
 
         $location = $finder->locate('myerscode/test-package');
 
-        $this->assertEquals(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package', $location);
+        $this->assertSame(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package', $location);
     }
 
     public function testThrowsExceptionWhenCannotLocatePackage(): void
@@ -99,7 +99,7 @@ class FinderTest extends TestCase
 
         $meta = $finder->packageMetaForService('myerscode/test-package', 'myerscode');
 
-        $this->assertEquals([
+        $this->assertSame([
             "corgis" => ["Gerald", "Rupert"],
             "providers" => [
                 "Myerscode\\Testing\\TestingServiceProvider"
@@ -108,7 +108,7 @@ class FinderTest extends TestCase
 
         $meta = $finder->packageMetaForService('myerscode/test-package', 'corgi');
 
-        $this->assertEquals([], $meta);
+        $this->assertSame([], $meta);
     }
 
     public function testCanGePackageExtras(): void
@@ -118,7 +118,7 @@ class FinderTest extends TestCase
 
         $meta = $finder->packageExtra('myerscode/test-package');
 
-        $this->assertEquals([
+        $this->assertSame([
             "myerscode" => [
                 "corgis" => ["Gerald", "Rupert"],
                 "providers" => [

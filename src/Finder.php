@@ -28,8 +28,8 @@ readonly class Finder
     {
         $packages = [];
 
-        if (($installedPackages = new FileUtility($this->vendorPath().'/composer/installed.json'))->exists()) {
-            $installed = json_decode($installedPackages->content(), true);
+        if (($utility = new FileUtility($this->vendorPath().'/composer/installed.json'))->exists()) {
+            $installed = json_decode($utility->content(), true);
 
             $packages = $installed['packages'] ?? [];
         }
@@ -39,7 +39,7 @@ readonly class Finder
 
     protected function findPackage(string $packageName): array
     {
-        $packages = (new BagUtility($this->installedPackages()))->mapKeys(fn($k, $v) => [$v['name'] => $v])->value();
+        $packages = new BagUtility($this->installedPackages())->mapKeys(fn($k, $v): array => [$v['name'] => $v])->value();
 
         if (!isset($packages[$packageName])) {
             throw new InvalidArgumentException($packageName . ' is not a known package');
@@ -57,11 +57,11 @@ readonly class Finder
     {
         $ignore = [];
 
-        if (($rootPackage = new FileUtility($this->basePath.'/composer.json'))->exists()) {
-            $ignore = json_decode($rootPackage->content(), true)['extra'][$forPackage]['avoid'] ?? [];
+        if (($utility = new FileUtility($this->basePath.'/composer.json'))->exists()) {
+            $ignore = json_decode($utility->content(), true)['extra'][$forPackage]['avoid'] ?? [];
         }
 
-        return (new BagUtility($ignore))->filter()->value();
+        return new BagUtility($ignore)->filter()->value();
     }
 
     /**
@@ -71,14 +71,14 @@ readonly class Finder
      */
     public function discover(string $forPackage): array
     {
-        $packages = new BagUtility($this->installedPackages());
+        $utility = new BagUtility($this->installedPackages());
 
         $ignore = $this->ignore($forPackage);
 
         $shouldIgnoreAll = $ignore == "*" || in_array('*', $ignore);
 
-        return $packages
-            ->mapKeys(fn($k, $v) => [$v['name'] => $v['extra'][$forPackage] ?? []])
+        return $utility
+            ->mapKeys(fn($k, $v): array => [$v['name'] => $v['extra'][$forPackage] ?? []])
             ->filter(fn($v): bool => count($v) > 0)
             ->filter(fn($value, $key): bool => !$shouldIgnoreAll && !in_array($key, $ignore))
             ->value();
