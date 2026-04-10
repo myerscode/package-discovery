@@ -8,10 +8,11 @@ use Myerscode\PackageDiscovery\Finder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
+use Iterator;
 
 final class FinderTest extends TestCase
 {
-    public static function __discoverData(): \Iterator
+    public static function __discoverData(): Iterator
     {
         yield [
             'test_one',
@@ -40,6 +41,52 @@ final class FinderTest extends TestCase
         ];
     }
 
+    public function testCanGePackageExtras(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $meta = $finder->packageExtra('myerscode/test-package');
+
+        $this->assertSame([
+            'myerscode' => [
+                'corgis' => ['Gerald', 'Rupert'],
+                'providers' => [
+                    'Myerscode\\Testing\\TestingServiceProvider',
+                ],
+            ],
+        ], $meta);
+    }
+
+    public function testCanGetMetaForPackageUsingMetaNamespace(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $meta = $finder->packageMetaForService('myerscode/test-package', 'myerscode');
+
+        $this->assertSame([
+            'corgis' => ['Gerald', 'Rupert'],
+            'providers' => [
+                'Myerscode\\Testing\\TestingServiceProvider',
+            ],
+        ], $meta);
+
+        $meta = $finder->packageMetaForService('myerscode/test-package', 'corgi');
+
+        $this->assertSame([], $meta);
+    }
+
+    public function testCanLocatePackage(): void
+    {
+        $basePath = __DIR__.'/Resources/test_locate';
+        $finder = new Finder($basePath);
+
+        $location = $finder->locate('myerscode/test-package');
+
+        $this->assertSame(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package', $location);
+    }
+
     public function testCanSeeInstalledPackages(): void
     {
         $basePath = __DIR__.'/../';
@@ -47,15 +94,6 @@ final class FinderTest extends TestCase
         $installed = $finder->installedPackages();
         $this->assertIsArray($installed);
         $this->assertGreaterThan(0, count($installed));
-    }
-
-    public function testHandlesMissingInstallFile(): void
-    {
-        $basePath = __DIR__.'/Resources';
-        $finder = new Finder($basePath);
-        $installed = $finder->installedPackages();
-        $this->assertIsArray($installed);
-        $this->assertCount(0, $installed);
     }
 
 
@@ -71,14 +109,13 @@ final class FinderTest extends TestCase
         $this->assertCount($found, $discovered);
     }
 
-    public function testCanLocatePackage(): void
+    public function testHandlesMissingInstallFile(): void
     {
-        $basePath = __DIR__.'/Resources/test_locate';
+        $basePath = __DIR__.'/Resources';
         $finder = new Finder($basePath);
-
-        $location = $finder->locate('myerscode/test-package');
-
-        $this->assertSame(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package', $location);
+        $installed = $finder->installedPackages();
+        $this->assertIsArray($installed);
+        $this->assertCount(0, $installed);
     }
 
     public function testThrowsExceptionWhenCannotLocatePackage(): void
@@ -90,41 +127,5 @@ final class FinderTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($packageName . ' is not a known package');
         $finder->locate($packageName);
-    }
-
-    public function testCanGetMetaForPackageUsingMetaNamespace(): void
-    {
-        $basePath = __DIR__.'/Resources/test_locate';
-        $finder = new Finder($basePath);
-
-        $meta = $finder->packageMetaForService('myerscode/test-package', 'myerscode');
-
-        $this->assertSame([
-            "corgis" => ["Gerald", "Rupert"],
-            "providers" => [
-                "Myerscode\\Testing\\TestingServiceProvider"
-            ]
-        ], $meta);
-
-        $meta = $finder->packageMetaForService('myerscode/test-package', 'corgi');
-
-        $this->assertSame([], $meta);
-    }
-
-    public function testCanGePackageExtras(): void
-    {
-        $basePath = __DIR__.'/Resources/test_locate';
-        $finder = new Finder($basePath);
-
-        $meta = $finder->packageExtra('myerscode/test-package');
-
-        $this->assertSame([
-            "myerscode" => [
-                "corgis" => ["Gerald", "Rupert"],
-                "providers" => [
-                    "Myerscode\\Testing\\TestingServiceProvider"
-                ]
-            ]
-        ], $meta);
     }
 }
