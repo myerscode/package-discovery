@@ -43,6 +43,20 @@ class Finder
     }
 
     /**
+     * Check if a package is installed
+     */
+    public function has(string $packageName): bool
+    {
+        foreach ($this->installedPackages() as $package) {
+            if ($package['name'] === $packageName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get collection of installed packages
      *
      * @return array<int, array<string, mixed>>
