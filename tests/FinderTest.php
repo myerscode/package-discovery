@@ -144,7 +144,8 @@ final class FinderTest extends TestCase
 
         $location = $finder->locate('myerscode/test-package');
 
-        $this->assertSame(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package', $location);
+        $expected = realpath(__DIR__.'/Resources/test_locate/vendor/myerscode/test-package');
+        $this->assertSame($expected, $location);
     }
 
     public function testCanSeeInstalledPackages(): void
