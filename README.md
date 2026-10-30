@@ -5,7 +5,7 @@
 [![Total Downloads](https://poser.pugx.org/myerscode/package-discovery/downloads)](https://packagist.org/packages/myerscode/package-discovery)
 [![PHP Version Require](http://poser.pugx.org/myerscode/package-discovery/require/php)](https://packagist.org/packages/myerscode/package-discovery)
 [![License](https://poser.pugx.org/myerscode/package-discovery/license)](https://github.com/myerscode/package-discovery/blob/main/LICENSE)
-[![Tests](https://github.com/myerscode/package-discovery/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/myerscode/package-discovery/actions/workflows/tests.yml)
+[![Tests](https://github.com/myerscode/package-discovery/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/myerscode/package-discovery/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/myerscode/package-discovery/graph/badge.svg)](https://codecov.io/gh/myerscode/package-discovery)
 
 
