@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Calendar Versioning](https://calver.org/).
 
+## [2026.0.1] - 2026-10-31
+### New Features
+- [`b45d87d`](https://github.com/myerscode/package-discovery/commit/b45d87dae01dcea639210526f303d42a2125f7b5) - **ci**: add shared dependabot auto-merge *(PR [#4](https://github.com/myerscode/package-discovery/pull/4) by [@oniice](https://github.com/oniice))*
+
+### Bug Fixes
+- [`d765176`](https://github.com/myerscode/package-discovery/commit/d7651768162e811800411df8accb2f23487faf2b) - **tests**: track fixture directory with .gitkeep so locate() works on CI *(commit by [@oniice](https://github.com/oniice))*
+- [`d86bd38`](https://github.com/myerscode/package-discovery/commit/d86bd383442becf2ae5ec43e58b8d1b2e25bd044) - **tests**: use realpath() for expected path in locate test to handle Windows separators *(commit by [@oniice](https://github.com/oniice))*
+
+
 ## [2026.0.0] - 2026-04-10
 ### New Features
 - [`6fe9688`](https://github.com/myerscode/package-discovery/commit/6fe96888b203f767e69203c5da1c08e44c29a912) - **exceptions**: add PackageNotFoundException extending InvalidArgumentException *(commit by [@oniice](https://github.com/oniice))*
@@ -42,3 +51,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - [`58a1657`](https://github.com/myerscode/package-discovery/commit/58a165734308b2e9db19e4de4ce98ebbd3bef1d6) update: changed field for avoiding package discovery
 - [`f27323f`](https://github.com/myerscode/package-discovery/commit/f27323f5a6040d3bd837c675fd82c0df1fb71664) created project
 [2026.0.0]: https://github.com/myerscode/package-discovery/compare/2025.0.0...2026.0.0
+[2026.0.1]: https://github.com/myerscode/package-discovery/compare/2026.0.0...2026.0.1
